@@ -1,0 +1,13 @@
+{
+    "require": {
+        "monolog/monolog": "^2.2",
+        "mike42/escpos-php": "^4.0",
+        "php-serial/php-serial": "^1.0"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/php-serial/php-serial.git"
+        }
+    ]
+}
