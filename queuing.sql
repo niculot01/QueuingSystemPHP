@@ -53,6 +53,28 @@ CREATE TABLE canceled_customers (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE 2ndqueue (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  queue_number VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(255) NOT NULL,
+  party_size INT(11) NOT NULL,
+  queue_time DATETIME NOT NULL,
+  canceled_time DATETIME NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE 3rdqueue (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  queue_number VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(255) NOT NULL,
+  party_size INT(11) NOT NULL,
+  queue_time DATETIME NOT NULL,
+  canceled_time DATETIME NOT NULL,
+  PRIMARY KEY (id)
+);
+
 
 SELECT MAX(primary_key_column) FROM table_name;
 

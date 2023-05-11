@@ -1,6 +1,8 @@
 <?php
+
 if (!extension_loaded('sockets')) {
-    dl('sockets' . PHP_SHLIB_SUFFIX);
+    header('Location: self_add.php');
+    exit();
 }
 
 $partySize = $_POST['priority_party_size'];

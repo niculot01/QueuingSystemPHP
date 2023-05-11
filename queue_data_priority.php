@@ -120,7 +120,7 @@ foreach ($queue_data_by_party_size as $party_size => $customers) {
   echo '</tr>';
   foreach ($customers as $customer) {
     echo '<tr>';
-    echo '<td class="queue-number">' . htmlspecialchars($customer['queue_number']) . '</td>';
+    echo '<td class="queue-number"style="font-size:20px; font-weight: 700;">' . htmlspecialchars($customer['queue_number']) . '</td>';
     echo '<td>' . htmlspecialchars($customer['queue_time']) . '</td>';
     echo '<td>' . htmlspecialchars($customer['status']) . '</td>';
     echo '<td>';

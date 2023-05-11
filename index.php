@@ -4,13 +4,13 @@
 <head>
   <style>
     .body {
-      position: relative;
+      position: fixed;
       max-height: fit-content;
     }
 
     .h1-text {
       text-align: center;
-      margin-top: 50px;
+      margin-top: 0px;
     }
 
     .labelnames,
@@ -98,7 +98,7 @@
     .labelsearch button,
     .labelfilter button {
       padding: 5px;
-      font-size: 16px;
+      font-size: 25px;
       border-radius: 5px;
       border: none;
       background-color: #4CAF50;
@@ -141,7 +141,7 @@
       text-align: center;
       padding: 10px;
       padding-top: 0px;
-      height: 525px;
+      height: 425px;
     }
 
     .flex-wrapper2 {
@@ -166,7 +166,7 @@
     .clear-counter-button {
       position: absolute;
       top: 10px;
-      right: 90%;
+      right: 85%;
       display: flex;
       align-items: center;
     }
@@ -176,7 +176,6 @@
       color: white;
       border: none;
       padding: 5px;
-
       margin-right: 5px;
       transition: transform 0.2s ease;
     }
@@ -225,7 +224,13 @@
     setInterval(function () {
       $('#queue').load('queue_data.php');
     }, 1000);
+
+    // Reload the index file every 3 seconds
+    setInterval(function () {
+      location.reload();
+    }, 3000);
   </script>
+
 
 
   <script>
@@ -267,6 +272,18 @@
       button.addEventListener('mouseout', hideTooltip);
     });
   </script>
+  <script>
+    function reloadQueue() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://192.168.0.250/Q/queuelist.php", true);
+      xhr.send();
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          location.reload();
+        }
+      };
+    }
+  </script>
 
 
 </head>
@@ -277,13 +294,14 @@
       <div class="h1-text">
         <h1>GoodTaste Restaurant Customer Queue</h1>
         <div class="clear-counter-button">
+          <button class="refresh" style="margin-right: 18px;" onclick="location.reload()" title="Refresh Page"><i
+              class="fa fa-refresh fa-2x" aria-hidden="true"></i></button>
+
           <form method="post" action="clear_counter.php">
             <button type="submit" name="clear_counter" title="Reset Queue Numbers"><i class="fa fa-minus-circle fa-2x"
                 aria-hidden="true"></i></button>
           </form>
-          <br>
-          <button class="refresh" onclick="location.reload()" title="Refresh Page"><i class="fa fa-refresh fa-2x"
-              aria-hidden="true"></i></button>
+
 
           <form method="post" action="delete_all.php"
             onsubmit="return confirm('Are you sure you want to delete all records?')">
@@ -292,60 +310,70 @@
           </form>
           <!-- <button class="refresh" onclick="location.href='queuelist.php'" title="Reload Queuelist">
             <i class="fa fa-refresh fa-2x" aria-hidden="true"></i></button> -->
-         
+
+          <button class="fa fa-refresh fa-2x" style="position:absolute; top:60px"
+            onclick="reloadQueue()">Queuelist</button>
         </div>
       </div>
 
-      <div class="form-container">
+      <!-- <div class="form-container">
         <div class="form-wrapper">
           <form class="labelnames" method="post" action="add_customer.php">
             <label for="party_size">Party Size:</label>
-            <select id="party_size" name="party_size" required>
+            <select id="party_sizes" name="party_size" required>
+
+              <option value="10">2</option>
+
               <option value="4">4</option>
-              <option value="10">10</option>
+
+
+              <option value="10">8</option>
+
+              <option value="4">10</option>
+
               <option value="12">12</option>
             </select>
             <button type="submit">Add to Regular Queue</button>
           </form>
-        </div>
-        <div class="form-wrapper">
-          <form class="labelnames" method="post" action="add_customer_priority.php">
-            <label for="priority_party_size">Priority Party Size:</label>
-            <select id="priority_party_size" name="priority_party_size" required>
-              <option value="4">4</option>
-              <option value="10">10</option>
-              <option value="12">12</option>
-            </select>
-            <button type="submit">Add to Priority Queue</button>
-          </form>
-        </div>
+        </div> -->
+      <div class="form-wrapper">
+        <form class="labelnames" method="post" action="add_customer_priority.php">
+          <label for="priority_party_size">Priority Party Size:</label>
+          <select id="priority_party_size" name="priority_party_size" required>
+            <option value="4">1</option>
+            <option value="4">2</option>
+            <option value="4">3</option>
+            <option value="4">4</option>
+            <option value="10">5</option>
+            <option value="10">6</option>
+            <option value="10">7</option>
+            <option value="10">8</option>
+            <option value="10">9</option>
+            <option value="10">10</option>
+            <option value="12">11</option>
+            <option value="12">12</option>
+          </select>
+          <button type="submit">Add to Priority Queue</button>
+        </form>
       </div>
-
-      <!-- <form class="labelsearch" method="post">
-        <label for="search">Search:</label>
-        <input type="text" name="search" id="search" placeholder="Filter Name & Phone No." required>
-        <button type="submit">Search</button>
-      </form> -->
-
-      <div class="flex-wrapper">
-        <div class="table-wrapper">
-          <div class="table-container">
-            <?php include 'queue_data.php'; ?>
-          </div>
-        </div>
-      </div>
-
     </div>
-    <div class="flex-wrapper2" >
-      <div class="table-wrapper2" style="height:200px;">
-        <div class="table-container2" >
-          <?php include 'queue_data_priority.php'; ?>
+
+
+    <div class="flex-wrapper">
+      <div class="table-wrapper">
+        <div class="table-container">
+          <?php include 'queue_data.php'; ?>
         </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="flex-wrapper2">
+    <div class="table-wrapper2" style="height:200px;">
+      <div class="table-container2">
+        <?php include 'queue_data_priority.php'; ?>
       </div>
     </div>
   </div>
+  </div>
 </body>
-
-
-
-<!-- PAX DB,  tables(forms for queue number per pax) -->

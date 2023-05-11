@@ -1,12 +1,22 @@
 <?php
+
 if (!extension_loaded('sockets')) {
-    dl('sockets' . PHP_SHLIB_SUFFIX);
+    header('Location: self_add.php');
+    exit();
 }
 
-$partySize = $_POST['party_size'];
+
+// Get the party size from the form
+$partySize = filter_input(INPUT_POST, 'party_size', FILTER_VALIDATE_INT);
+if ($partySize === false || $partySize < 1 || $partySize > 12) {
+    // Handle invalid input
+    header('Location: self_add.php?error=invalid_input');
+    exit();
+}
 $lastQueueNumber = '';
 
 date_default_timezone_set('Asia/Manila');
+
 
 
 // Load the counters from the file
@@ -19,19 +29,17 @@ try {
 }
 
 // Check if there are any previous queue numbers for this party size
-if (isset($counters[$partySize])) {
-    $lastQueueNumber = $counters[$partySize];
-}
-
-// If there are no previous queue numbers for this party size, start from 1
-if (empty($lastQueueNumber)) {
-    $lastQueueNumber = 0;
-}
+$lastQueueNumber = isset($counters[$partySize]) ? $counters[$partySize] : 0;
 
 // Generate the next queue number for this party size
 $queueNumberPrefix = 'GT' . str_pad($partySize, 1, '0', STR_PAD_LEFT);
 $counter = $lastQueueNumber + 1;
 $queueNumber = $queueNumberPrefix . str_pad($counter, 3, '0', STR_PAD_LEFT);
+
+// If there are no previous queue numbers for this party size, start from 1
+if (empty($lastQueueNumber)) {
+    $lastQueueNumber = 0;
+}
 
 // Increment the counter for this party size and store the updated counters back in the file
 try {
@@ -40,11 +48,12 @@ try {
 } catch (Exception $e) {
     // Handle the error here
     error_log($e->getMessage());
+    header('Location: self_add.php?error=counter_error');
+    exit();
 }
 
-
-$date = date("m-d-Y\n h:i:s A");
-
+// $currentTime = date('g:i A');
+$date = date("m-d-Y\n h:i:s A", strtotime("now"));
 
 
 // // Create the receipt string with character spacing 1
@@ -56,9 +65,8 @@ $date = date("m-d-Y\n h:i:s A");
 // $queuePadding = str_repeat(' ', $paddingLength);
 
 // $receipt .= $queuePadding . $queueNumber . "\x1D\x40\x00\x1B\x21\x00 "
-//     . "\n\n\n\n" .
-//     str_pad("After 2 minutesof the number\nbeing called,\nit will be\nforfeited.", 20, "\x05", STR_PAD_BOTH)
-
+//  . "\n\n" . "Please wait for your number\nto be called.\nTHANK YOU!" . "\n\n" .
+//     str_pad("After 1 minuteof the number\nbeing called,\nit will be\nforfeited.", 20, "\x05", STR_PAD_BOTH)
 
 //     . "\n- - - - - - - - \n $date\n\n\n\n\n\n\x1b" . 'm';
 // $receipt .= "\x1d\x21\x00\x1b\x45\x00";
@@ -66,25 +74,29 @@ $date = date("m-d-Y\n h:i:s A");
 // Insert the customer into the database
 $db = new PDO("mysql:host=localhost;dbname=queuing", "root", "");
 $query = $db->prepare("INSERT INTO queue (party_size, queue_time, status, queue_number) VALUES (?, NOW(), 'waiting', ?)");
-$query->execute([$partySize, $queueNumber]);
-
+if (!$query->execute([$partySize, $queueNumber])) {
+    // Handle the error here
+    header('Location: self_add.php?error=database_error');
+    exit();
+}
 
 // //Connect to the printer
 // $printerIP = '192.168.0.50';
 // $printerPort = 9100;
 // $printer = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-// if (!$printer) {
-//     die("Unable to create socket.");
-// }
+// // if (!$printer) {
+// //     die("Unable to create socket.");
+// // }
 // $result = socket_connect($printer, $printerIP, $printerPort);
-// if (!$result) {
-//     die("Unable to connet to printer.");
-// }
+// // if (!$result) {
+// //     die("Unable to connet to printer.");
+// // }
 
-// Print the receipt
-socket_write($printer, $receipt, strlen($receipt));
-socket_close($printer);
+// // Print the receipt
+// socket_write($printer, $receipt, strlen($receipt));
+// socket_close($printer);
 
-header('Location: index.php');
+// Redirect the customer back to the self_add.php page with the queue number
+header("Location: self_add.php?queue_number=$queueNumber");
 exit();
 ?>

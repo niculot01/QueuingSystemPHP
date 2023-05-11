@@ -7,15 +7,13 @@
   .flex-item {
     max-width: 33%;
     /* max-height: 70%; */
-    height: 500px;
+    height: 440px;
     overflow: auto;
     overflow-x: hidden;
     align-items: center;
     text-align: left;
     padding: 10px;
     padding-top: 0px;
-
-
   }
 
   .flex-item h2 {
@@ -106,7 +104,8 @@
 
   button {
     padding: 3px;
-    font-size: 12px;
+    margin-bottom: 3px;
+    font-size: 20px;
     border-radius: 8px;
     border: none;
     background-color: rosybrown;
@@ -143,7 +142,7 @@
 
   button {
     margin-right: 5px;
-    padding: 7px
+    padding: 5px
   }
 
   .button-container {
@@ -156,7 +155,8 @@
   .button-container button {
     margin: 0 5px;
     padding: 5px;
-    font-size: 12px;
+    font-size: 15px;
+    font-weight: 700;
     border-radius: 4px;
     border: none;
     background-color: #4CAF50;
@@ -304,25 +304,22 @@ foreach ($queue_data as $customer) {
 
 
 // Initialize an empty array for each party size
-$queue_data_by_party_size = array();
-$party_sizes = array(4, 10, 12);
-foreach ($party_sizes as $size) {
-  $queue_data_by_party_size[$size] = array();
-}
-
+$queue_data_by_party_size = array(
+  4 => array(),
+  10 => array(),
+  12 => array()
+);
 
 
 // Convert the queue data into arrays based on party size
 foreach ($queue_data as $customer) {
   $party_size = $customer['party_size'];
-  if (in_array($party_size, $party_sizes)) {
-    $queue_data_by_party_size[$party_size][] = array(
-      'id' => $customer['id'],
-      'queue_number' => $customer['queue_number'],
-      'party_size' => $customer['party_size'],
-      'queue_time' => $customer['queue_time'],
-      'status' => $customer['status']
-    );
+  if ($party_size >= 1 && $party_size <= 4) {
+    $queue_data_by_party_size[4][] = $customer;
+  } elseif ($party_size >= 5 && $party_size <= 10) {
+    $queue_data_by_party_size[10][] = $customer;
+  } elseif ($party_size >= 11 && $party_size <= 12) {
+    $queue_data_by_party_size[12][] = $customer;
   }
 }
 
@@ -332,22 +329,26 @@ foreach ($queue_data as $customer) {
 echo '<div class="flex-container">';
 foreach ($queue_data_by_party_size as $party_size => $customers) {
   echo '<div class="flex-item">';
-  echo '<h2>Pax: ' . $party_size . '</h2>';
+  echo '<h2>Pax ' . $party_size . ' (' . count($customers) . ')</h2>';
   echo '<div class="table-wrapper"><table>';
   echo '<tr>';
   echo '<th>Queue No.</th>';
+  // echo '<th>Pax</th>';
   echo '<th>Time</th>';
   echo '<th>Status</th>';
   echo '<th class="action">Action</th>';
   echo '</tr>';
   foreach ($customers as $customer) {
     echo '<tr>';
-    echo '<td class="queue-number">' . htmlspecialchars($customer['queue_number']) . '</td>';
-    echo '<td>' . htmlspecialchars($customer['queue_time']) . '</td>';
+    echo '<td class="queue-number" style="font-size:20px; font-weight: 700;">' . htmlspecialchars($customer['queue_number']) . '</td>';
+    // echo '<td>' . htmlspecialchars($customer['party_size']) . '</td>';
+    echo '<td style="white-space: nowrap">' . date('g:i A', strtotime($customer['queue_time'])) . '</td>';
     echo '<td>' . htmlspecialchars($customer['status']) . '</td>';
     echo '<td>';
     if ($customer['status'] == 'waiting') {
 
+      //CREATE DATABASE
+      //CREATE POP UP WINDOW FORM FOR SELECTING FLOORS TO SERVE
 
       echo '<form method="POST" action="serve_customer.php">';
       echo '<input type="hidden" name="queue_number" value="' . htmlspecialchars($customer['queue_number']) . '">';
@@ -362,7 +363,7 @@ foreach ($queue_data_by_party_size as $party_size => $customers) {
 
     }
     if ($customer['status'] == 'serving') {
-      echo '<form method="post" action="seat_customer.php">';
+      echo '<form method="post" action="seat_customer1.php">';
       echo '<input type="hidden" name="id" value="' . htmlspecialchars($customer['id']) . '">';
       echo '<button type="submit">Seat</button></form>';
 

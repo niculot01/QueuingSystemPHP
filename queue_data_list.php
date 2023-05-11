@@ -17,7 +17,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        height: 620px;
+        height: 650px;
 
 
 
@@ -32,8 +32,8 @@
         font-size: 50px;
         text-align: center;
         border-radius: 20px;
-        min-height: 620px;
-        max-height: 680px;
+ 
+        max-height: 660px;
         background-color: #ffffff;
         color: black;
         font-family: 'newake';
@@ -178,23 +178,30 @@ foreach ($queue as $customer) {
 }
 
 // Retrieve the customers who are still waiting in the queue
-$query = $db->prepare("SELECT  queue_number, party_size, status FROM queue WHERE status = 'waiting' OR status = 'serving' ORDER BY queue_time");
+$query = $db->prepare("SELECT queue_number, party_size, status FROM queue WHERE status = 'waiting' OR status = 'serving' ORDER BY queue_time");
 $query->execute();
 $queue = $query->fetchAll();
 
 // Group customers by party size
-$queue_data_by_party_size = array();
+$queue_data_by_party_size = array(
+  4 => array(),
+  10 => array(),
+  12 => array()
+);
 $now_serving = array();
 foreach ($queue as $customer) {
-    $party_size = $customer['party_size'];
-    if ($customer['status'] == 'serving') {
-        $now_serving[] = $customer;
-    } else {
-        if (!isset($queue_data_by_party_size[$party_size])) {
-            $queue_data_by_party_size[$party_size] = array();
-        }
-        $queue_data_by_party_size[$party_size][] = $customer;
+  $party_size = $customer['party_size'];
+  if ($customer['status'] == 'serving') {
+    $now_serving[] = $customer;
+  } else {
+    if ($party_size >= 1 && $party_size <= 4) {
+      $queue_data_by_party_size[4][] = $customer;
+    } elseif ($party_size >= 5 && $party_size <= 10) {
+      $queue_data_by_party_size[10][] = $customer;
+    } elseif ($party_size >= 11 && $party_size <= 12) {
+      $queue_data_by_party_size[12][] = $customer;
     }
+  }
 }
 
 // Sort the $now_serving array in ascending order based on the queue_number column

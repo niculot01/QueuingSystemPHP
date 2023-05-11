@@ -17,6 +17,6 @@ $query->execute([$_POST['id']]);
 
 
 // Redirect back to the queue page
-header('Location: display1.php');
+header('Location: index.php');
 exit();
 ?>
