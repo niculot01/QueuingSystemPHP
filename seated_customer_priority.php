@@ -1,4 +1,5 @@
 <?php
+require_once('config.php');
 $db = new PDO("mysql:host=localhost;dbname=queuing", "root", "");
 
 // Retrieve the customer's queue_time
@@ -17,6 +18,6 @@ $query->execute([$_POST['id']]);
 
 
 // Redirect back to the queue page
-header('Location: index.php');
+header('Location: usher.php');
 exit();
 ?>

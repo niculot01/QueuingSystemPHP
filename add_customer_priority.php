@@ -1,5 +1,6 @@
 <?php
-
+ require_once('config.php');
+ 
 if (!extension_loaded('sockets')) {
     header('Location: self_add.php');
     exit();
@@ -88,6 +89,6 @@ if (!$result) {
 socket_write($printer, $receipt, strlen($receipt));
 socket_close($printer);
 
-header('Location: index.php');
+header('Location: usher.php');
 exit();
 ?>

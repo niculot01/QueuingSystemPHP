@@ -152,7 +152,10 @@
       $('#queue').load('queue_data_list.php');
       $('#priority_queue').load('queue_data_list_priority.php');
     }, 1000);
+
+    require_once('config.php');
   </script>
+
 
   <footer>
     <marquee direction="left" height="10" width="auto">

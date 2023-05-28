@@ -1,4 +1,5 @@
 <?php
+ require_once('config.php');
 
 $file = 'counters.json';
 
@@ -27,7 +28,7 @@ if (file_exists($file)) {
   echo "Counter file does not exist.";
 }
 
-header('Location: index.php');
+header('Location: usher.php');
 exit();
 
 ?>

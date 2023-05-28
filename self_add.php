@@ -12,7 +12,7 @@
     img {
         padding-top: 20px;
         transition: transform 0.2s ease-out;
-        
+
     }
 
     img:hover {
@@ -282,6 +282,7 @@
         /* animation: tap 1s infinite; */
         animation: wiggles 15s linear infinite;
     }
+
     @keyframes wiggles {
         0% {
             transform: rotate(0deg) scale(0.9);
@@ -480,6 +481,10 @@
                         <option value="10">10</option>
                         <option value="11">11</option>
                         <option value="12">12</option>
+                        <option value="15">16</option>
+                        <option value="20">20</option>
+                        <option value="25">25</option>
+                        <option value="30">30</option>
                     </select>
                     <div class="arrow-container">
                         <h2 class="animated-text">Group size?<br><br>Ilan kayo sa inyong grupo?</h2>
@@ -503,7 +508,8 @@
         <div class="text">
             <h2 style="text-align:center;">Kindly obtain your queue number and make your way to the designated waiting
                 area.</h2>
-            <h3 style="text-align:center;">Maaari po bang kunin ninyo ang inyong numero sa pila at maghintay sa itinakdang lugar para sa mga naghihintay.</h3>
+            <h3 style="text-align:center;">Maaari po bang kunin ninyo ang inyong numero sa pila at maghintay sa
+                itinakdang lugar para sa mga naghihintay.</h3>
         </div>
     </div>
 </body>

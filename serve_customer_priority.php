@@ -1,4 +1,5 @@
 <?php
+require_once('config.php');
 $db = new PDO("mysql:host=localhost;dbname=queuing", "root", "");
 
 // Retrieve the queue number of the customer to be served
@@ -10,6 +11,6 @@ $query->bindParam(':queue_number', $queue_number);
 $query->execute();
 
 // Redirect back to the queue page
-header('Location: index.php');
+header('Location: usher.php');
 exit();
 ?>

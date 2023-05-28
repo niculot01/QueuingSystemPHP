@@ -32,7 +32,7 @@
         font-size: 50px;
         text-align: center;
         border-radius: 20px;
- 
+
         max-height: 660px;
         background-color: #ffffff;
         color: black;
@@ -47,7 +47,6 @@
 
     .table-4 {
         width: 250px
-        
     }
 
     .table-10 {
@@ -70,17 +69,17 @@
         text-align: center;
         background-color: #ffffff;
         border-radius: 20px;
-        
+
 
 
     }
 
     /* Queue no. for waiting list */
     tbody {
-       
+
         overflow-y: hidden;
         border-radius: 20px;
-        
+
 
 
     }
@@ -145,9 +144,10 @@
 
     .nstd {
         font-family: 'newake', sans-serif;
-        font-size: 80px;
+        font-size: 70px;
         text-align: center;
         animation: blink 5s infinite;
+
     }
 
     @keyframes blink {
@@ -156,9 +156,28 @@
         }
 
     }
+
+    .hayst {
+        display: inline-block;
+        padding-left: 20px;
+        color: #666;
+        font-family: 'newake', sans-serif;
+        font-size: 50px;
+        text-align: center;
+        animation: utot 5s infinite;
+
+    }
+
+    @keyframes utot {
+        50% {
+            opacity: 0.7;
+        }
+
+    }
 </style>
 
 <?php
+require_once('config.php');
 // Connect to the database
 $db = new PDO("mysql:host=localhost;dbname=queuing", "root", "");
 
@@ -184,24 +203,24 @@ $queue = $query->fetchAll();
 
 // Group customers by party size
 $queue_data_by_party_size = array(
-  4 => array(),
-  10 => array(),
-  12 => array()
+    4 => array(),
+    10 => array(),
+    12 => array()
 );
 $now_serving = array();
 foreach ($queue as $customer) {
-  $party_size = $customer['party_size'];
-  if ($customer['status'] == 'serving') {
-    $now_serving[] = $customer;
-  } else {
-    if ($party_size >= 1 && $party_size <= 4) {
-      $queue_data_by_party_size[4][] = $customer;
-    } elseif ($party_size >= 5 && $party_size <= 10) {
-      $queue_data_by_party_size[10][] = $customer;
-    } elseif ($party_size >= 11 && $party_size <= 12) {
-      $queue_data_by_party_size[12][] = $customer;
+    $party_size = $customer['party_size'];
+    if ($customer['status'] == 'serving') {
+        $now_serving[] = $customer;
+    } else {
+        if ($party_size >= 1 && $party_size <= 4) {
+            $queue_data_by_party_size[4][] = $customer;
+        } elseif ($party_size >= 5 && $party_size <= 10) {
+            $queue_data_by_party_size[10][] = $customer;
+        } elseif ($party_size >= 11 && $party_size <= 12) {
+            $queue_data_by_party_size[12][] = $customer;
+        }
     }
-  }
 }
 
 // Sort the $now_serving array in ascending order based on the queue_number column
@@ -298,8 +317,25 @@ foreach ($queue as $key => $customer) {
             </tbody>
         </table>
     </div>
+    <?php
+    $sql = "SELECT q.queue_number, f.floor
+        FROM queue q
+        JOIN floor1 f ON q.queue_number = f.queue_number AND q.status = 'serving'
+        UNION
+        SELECT q.queue_number, f.floor
+        FROM queue q
+        JOIN floor2 f ON q.queue_number = f.queue_number AND q.status = 'serving'
+        UNION
+        SELECT q.queue_number, f.floor
+        FROM queue q
+        JOIN floor3 f ON q.queue_number = f.queue_number AND q.status = 'serving'
+        UNION
+        SELECT q.queue_number, f.floor
+        FROM queue q
+        JOIN floor6 f ON q.queue_number = f.queue_number AND q.status = 'serving'";
 
-    <!-- Display the table for NOW SERVING queue -->
+    $now_serving = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    ?>
     <!-- Display the table for NOW SERVING queue -->
     <div class="nstable-container" style="background-color: #ffba08">
         <h2 style="color: black; font-size: 50px;">NOW IN QUEUE</h2>
@@ -309,6 +345,9 @@ foreach ($queue as $key => $customer) {
                     <tr class="nstr">
                         <td class="nstd">
                             <?php echo $customer['queue_number']; ?>
+                            <div class="hayst">
+                                <?php echo $customer['floor']; ?>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>

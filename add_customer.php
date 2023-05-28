@@ -1,4 +1,5 @@
 <?php
+ require_once('config.php');
 
 if (!extension_loaded('sockets')) {
     header('Location: self_add.php');
@@ -8,7 +9,7 @@ if (!extension_loaded('sockets')) {
 
 // Get the party size from the form
 $partySize = filter_input(INPUT_POST, 'party_size', FILTER_VALIDATE_INT);
-if ($partySize === false || $partySize < 1 || $partySize > 12) {
+if ($partySize === false || $partySize < 1 || $partySize > 30) {
     // Handle invalid input
     header('Location: self_add.php?error=invalid_input');
     exit();
@@ -34,7 +35,7 @@ $lastQueueNumber = isset($counters[$partySize]) ? $counters[$partySize] : 0;
 // Generate the next queue number for this party size
 $queueNumberPrefix = 'GT' . str_pad($partySize, 1, '0', STR_PAD_LEFT);
 $counter = $lastQueueNumber + 1;
-$queueNumber = $queueNumberPrefix . str_pad($counter, 3, '0', STR_PAD_LEFT);
+$queueNumber = $queueNumberPrefix . '-' . str_pad($counter, 3, '0', STR_PAD_LEFT);
 
 // If there are no previous queue numbers for this party size, start from 1
 if (empty($lastQueueNumber)) {

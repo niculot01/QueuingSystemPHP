@@ -97,6 +97,7 @@
 </script> -->
 
 <?php
+require_once('config.php');
 // Connect to the database
 $db = new PDO("mysql:host=localhost;dbname=queuing", "root", "");
 
