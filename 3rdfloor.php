@@ -186,7 +186,7 @@ $queue_data_by_party_size = array(
       $queue_data_by_party_size[4][] = $customer;
     } elseif ($party_size >= 5 && $party_size <= 10) {
       $queue_data_by_party_size[10][] = $customer;
-    } elseif ($party_size >= 11 && $party_size <= 30) {
+    } elseif ($party_size >= 11 && $party_size <=50) {
       $queue_data_by_party_size[12][] = $customer;
     }
   }

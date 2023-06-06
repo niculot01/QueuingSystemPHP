@@ -186,7 +186,7 @@ $queue_data_by_party_size = array(
       $queue_data_by_party_size[4][] = $customer;
     } elseif ($party_size >= 5 && $party_size <= 10) {
       $queue_data_by_party_size[10][] = $customer;
-    } elseif ($party_size >= 11 && $party_size <= 30) {
+    } elseif ($party_size >= 11 && $party_size <= 50) {
       $queue_data_by_party_size[12][] = $customer;
     }
   }
@@ -214,7 +214,7 @@ foreach ($queue_data_by_party_size as $party_size => $customers) {
               echo '<button type="submit">Serve</button></form>';
         }
         if ($customer['status'] == 'serving') {
-            echo '<form method="post" action="seat3.php">';
+            echo '<form method="post" action="seat6.php">';
             echo '<input type="hidden" name="queue_number" value="' . htmlspecialchars($customer['queue_number']) . '">';
             echo '<input type="hidden" name="id" value="' . htmlspecialchars($customer['id']) . '">';
             echo '<button type="submit">Seat</button></form>';

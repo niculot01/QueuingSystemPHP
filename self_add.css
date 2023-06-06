@@ -1,0 +1,285 @@
+.body {
+    position: fixed;
+    max-height: fit-content;
+    touch-action: manipulation;
+  }
+  
+  /* Disable double-tap to zoom on iOS */
+  @media (max-width: 1024px) {
+    /* Adjust the max-width value based on your tablet's screen size */
+    body {
+      -webkit-text-size-adjust: 100%;
+    }
+  }
+
+.h1-text {
+    height: 30%;
+    text-align: center;
+}
+
+img {
+    padding-top: 20px;
+    transition: transform 0.2s ease-out;
+}
+
+img:hover {
+    transform: rotate(0deg);
+}
+
+img.clicked {
+    animation: wiggle 3s linear;
+    backface-visibility: hidden;
+}
+
+@keyframes wiggle {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: rotate(45deg) scale(1.5);
+    }
+
+    50% {
+        transform: rotate(-45deg) scale(1.5);
+    }
+
+    75% {
+        transform: rotate(45deg) scale(1.5);
+    }
+
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+}
+
+.labelnames,
+.labelsearch,
+.labelfilter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.labelfilter {
+    margin-left: auto;
+}
+
+.labelsearch {
+    margin-top: 55px;
+}
+
+.form-container>* {
+    flex: 1 1 50%;
+}
+
+.form-wrapper {
+    flex: 1 1 50%;
+    margin: 10px;
+}
+
+.position-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: whitesmoke;
+    box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.2);
+    padding-top: 5px;
+    padding-bottom: 3px;
+}
+
+.labelnames label,
+.labelsearch label,
+.labelfilter label {
+    margin-right: 10px;
+    font-weight: 700;
+    font-size: 130px;
+}
+
+.labelnames input[type="text"],
+.labelnames input[type="tel"],
+.labelnames select,
+.labelsearch input[type="text"],
+.labelfilter select {
+    padding: 1px;
+    font-size: 90px;
+    border-radius: 4px;
+    border: none;
+    background-color: #f2f2f2;
+}
+
+.labelnames input[type="text"]:focus,
+.labelnames input[type="tel"]:focus,
+.labelnames select:focus,
+.labelsearch input[type="text"]:focus,
+.labelfilter select:focus {
+    outline: none;
+    box-shadow: 0 0 4px 2px #4CAF50;
+}
+
+.labelnames button,
+.labelsearch button,
+.labelfilter button {
+    padding: 30px;
+    font-size: 120px;
+    border-radius: 35px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.labelnames button:hover,
+.labelsearch button:hover,
+.labelfilter button:hover {
+    cursor: pointer;
+    background-color: #3e8e41;
+}
+
+@media (max-width: 768px) {
+    .labelnames input[type="text"],
+    .labelnames input[type="tel"],
+    .labelnames select,
+    .labelsearch input[type="text"],
+    .labelfilter select {
+        font-size: 14px;
+    }
+
+    .labelnames button,
+    .labelsearch button,
+    .labelfilter button {
+        font-size: 12px;
+    }
+}
+
+.number-input {
+    display: flex;
+    align-items: center;
+}
+
+.numburger {
+    width: 150px;
+    text-align: center;
+ 
+}
+
+.number-input button {
+    margin: 30px;
+    padding: 10px 50px;
+    font-size: 100px;
+    border: none;
+    background-color: #4caf4fb7;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .number-input button:hover {
+    background-color: #45a049;
+  }
+  
+  .number-input button:active {
+    background-color: #3e8e41;
+  }
+  
+  .number-input button:focus {
+    outline: none;
+    box-shadow: 0 0 4px 2px #4CAF50;
+  }
+
+#party_size {
+    padding: 10px;
+    text-align: center;
+    border: 3px solid #ccc;
+    border-radius: 10px;
+}
+
+.labelnames button:disabled {
+    background-color: #ff0000;
+    /* change background color to red */
+    cursor: not-allowed;
+    /* disable cursor */
+}
+
+.arrow-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 200px;
+}
+
+.arrow {
+    position: absolute;
+    top: 45%;
+    left: 10%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    width: 60px;
+    height: 60px;
+    border: 10px solid lightblue;
+    border-top: none;
+    border-right: none;
+    animation: arrow-anim 4s ease-in-out infinite;
+}
+
+.animated-text {
+    padding-left: 20%;
+    font-size: 35px;
+    opacity: 0;
+    animation: text-anim 5s ease-in-out infinite;
+    animation-delay: 0.5s;
+}
+
+@keyframes arrow-anim {
+    0% {
+        transform: translate(-50%, -50%) rotate(45deg) translateY(-5px);
+    }
+
+    25% {
+        transform: translate(-50%, -50%) rotate(45deg) translateY(5px);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) rotate(45deg) translateY(-5px);
+    }
+
+    75% {
+        transform: translate(-50%, -50%) rotate(45deg) translateY(5px);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(45deg) translateY(-5px);
+    }
+}
+
+@keyframes text-anim {
+    0% {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+}
+
+.my-modal-class {
+    font-size: 32px; 
+    max-width: 600px; 
+  }
+  
+  .my-modal-content-class {
+    padding: 20px; 
+  }
+  
+  .my-modal-progress-bar-class {
+    height: 10px; 
+    border-radius: 5px; 
+    background-color: #3085d6; 
+  }

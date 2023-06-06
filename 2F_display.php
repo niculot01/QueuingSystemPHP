@@ -18,7 +18,7 @@
         function reloadPage() {
             setInterval(function () {
                 location.reload();
-            }, 1000);
+            }, 5000);
         }
     </script>
     <script>

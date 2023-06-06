@@ -33,18 +33,16 @@
       font-family: 'Revue', sans-serif;
       font-weight: 900;
       color: #fe0000;
-      background-image: url("logo.png");
+      background-image: url("GTLogo.gif");
       background-repeat: no-repeat;
       background-position: left;
       /* position image on left */
       background-size: auto 100%;
+
+
     }
 
-    .jumbotron img {
-      padding-left: 100px;
-      margin-right: 10px;
-      height: 150px;
-    }
+
 
     /* NOW IN QUEUE */
     .hatdog {}
@@ -64,7 +62,7 @@
       display: inline-block;
       white-space: nowrap;
       font-family: 'newake', sans-serif;
-      font-size: 50px;
+      font-size: 80px;
       padding-top: 5px;
       padding-bottom: 90px;
     }
@@ -77,7 +75,7 @@
       position: absolute;
       top: 5px;
       right: 10px;
-      font-size: 30px;
+      font-size: 45px;
       color: black;
     }
 
@@ -98,10 +96,11 @@
 <body class="body">
   <div class="jumbotron">
     <div>
-      <h3 style="font-family: 'newake', sans-serif; text-align:center; color: #d00000; font-size: 60px; padding-top: 40px; margin-bottom: 0px;">
+      <h3
+        style="font-family: 'newake', sans-serif; text-align:center; color: #d00000; font-size: 60px; padding-top: 40px; margin-bottom: 0px;">
         WELCOME TO</h3>
       <div class="date-time"></div>
-      <h1 class="wrapper" style="font-size: 60px;">GOODTASTE RESTAURANT - OTEK</h1>
+      <h1 class="wrapper" style="font-size: 70px;">GOODTASTE RESTAURANT - OTEK</h1>
     </div>
   </div>
   <div class="h2-container">
@@ -153,17 +152,21 @@
       $('#priority_queue').load('queue_data_list_priority.php');
     }, 1000);
 
-    require_once('config.php');
+
   </script>
 
 
   <footer>
     <marquee direction="left" height="10" width="auto">
       We are open from 6AM to 10PM daily.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      For modes of payment, we accept Cash, E-wallets (GCash, PayMaya), Debit and Credit Cards.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      For modes of payment, we accept Cash, E-wallets (GCash, PayMaya), Debit and Credit
+      Cards.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       PETS ARE NOT ALLOWED due to food safety and sanitation.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       To be fair with everyone, we do not accept table reservations.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      THANK YOU!
+      THANK YOU!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      PLEASE WAIT FOR YOUR NUMBER TO BE CALLED
+      WHILE WE ARE FINDING FOR A TABLE AVAILABLE FOR YOUR GROUPSIZE
+      (It might take a few minutes. Thank you for your patience.)
     </marquee>
   </footer>
 </body>

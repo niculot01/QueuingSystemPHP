@@ -49,7 +49,7 @@ if (file_exists($file)) {
   echo "Counter file does not exist.";
 }
 
-header('Location: usher.php');
+header('Location: index.php');
 exit();
 
 ?>

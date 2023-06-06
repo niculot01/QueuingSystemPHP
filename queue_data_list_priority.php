@@ -19,29 +19,19 @@
 
     .nstable-container1 {
         position: absolute;
-        top: 540px;
-        right: 75px;
+        top: 670px;
+        right: 50px;
         margin: 5px;
         padding: 5px;
         font-size: 50px;
         text-align: center;
         background-color: #ffffff;
         border-radius: 20px;
-        height: 235px;
-        width: 510px;
+        height: 280px;
+        width: 49.5%;
         overflow-y: hidden;
 
     }
-
-    /* .nstable-container h2 {
-        animation: blink 4s infinite;
-    }
-
-    @keyframes blink {
-        50% {
-            opacity: 0.5;
-        }
-    } */
 
 
     .nstable1 {
@@ -60,7 +50,8 @@
 
     .nstd1 {
         font-family: 'newake', sans-serif;
-        font-size: 90px;
+        font-size: 115px;
+        font-weight: 800;
         text-align: center;
         animation: blink 5s infinite;
     }
@@ -97,7 +88,6 @@
 </script> -->
 
 <?php
-require_once('config.php');
 // Connect to the database
 $db = new PDO("mysql:host=localhost;dbname=queuing", "root", "");
 
@@ -161,7 +151,7 @@ foreach ($queue as $key => $customer) {
 <div class="table-wrapper1">
     <!-- Display the table for NOW SERVING queue -->
     <div class="nstable-container1" style="background-color: #ffba08">
-        <h2 style="color: black; font-size: 40px; font-weight:800;">PRIORITY QUEUE</h2>
+        <h2 style="color: black; font-size: 50px; font-weight:800;">PRIORITY QUEUE</h2>
         <table class="nstable1">
             <tbody class="nstbody1">
                 <?php foreach ($now_serving as $customer): ?>

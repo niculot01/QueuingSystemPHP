@@ -61,54 +61,69 @@ $queuePadding = str_repeat(' ', $paddingLength);
 
 $receipt .= $queuePadding . $queueNumber . "\x1D\x40\x00\x1B\x21\x00 "
     . "\n\n" . "Please wait for your number\nto be called.\nTHANK YOU!" . "\n\n" .
-    str_pad("After 3 minutes of the number\nbeing called,\nit will be\nforfeited.", 20, "\x05", STR_PAD_BOTH)
+    str_pad("After 1 minute of the number\nbeing called,\nit will be\nforfeited.", 20, "\x05", STR_PAD_BOTH)
     . "\n- - - - - - - - \n $date\n\n\n\n\n\n\x1b" . 'm';
 $receipt .= "\x1d\x21\x00\x1b\x45\x00";
-
-// // Connect to the printer using sockets
-// $printerIP = '192.168.0.50';
-// $printerPort = 9100;
-// $printer = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-// if ($printer === false) {
-//     error_log("Unable to create socket.");
-//     header('Location: self_add.php?error=printer_error');
-//     exit();
-// }
-
-// $result = socket_connect($printer, $printerIP, $printerPort);
-// if ($result === false) {
-//     error_log("Unable to connect to the printer.");
-//     header('Location: self_add.php?error=printer_error');
-//     exit();
-// }
-
-// // Print the receipt
-// $bytesWritten = socket_write($printer, $receipt, strlen($receipt));
-// if ($bytesWritten === false) {
-//     error_log("Unable to write to the printer.");
-//     header('Location: self_add.php?error=printer_error');
-//     exit();
-// }
-
-// // Check if all data was written to the socket
-// if ($bytesWritten < strlen($receipt)) {
-//     error_log("Incomplete write to the printer.");
-//     header('Location: self_add.php?error=printer_error');
-//     exit();
-// }
-
-// socket_close($printer);
 
 // Insert the customer into the database
 $db = new PDO("mysql:host=localhost;dbname=queuing", "root", "");
 $query = $db->prepare("INSERT INTO queue (party_size, queue_time, status, queue_number) VALUES (?, NOW(), 'waiting', ?)");
 if (!$query->execute([$partySize, $queueNumber])) {
-    // Handle the error here
+    // Handle the error hereeeee
     header('Location: self_add.php?error=database_error');
     exit();
 }
 
-// Redirect the customer back to the self_add.php page with the queue number
-header("Location: self_add.php?queue_number=$queueNumber");
-exit();
+// Connect to the printer using sockets
+$printerIP = '192.168.0.50';
+$printerPort = 9100;
+$printer = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+if ($printer === false) {
+    error_log("Unable to create socket.");
+    header('Location: self_add.php?error=printer_error');
+    exit();
+}
+
+$result = socket_connect($printer, $printerIP, $printerPort);
+if ($result === false) {
+    error_log("Unable to connect to the printer.");
+    header('Location: self_add.php?error=printer_error');
+    exit();
+}
+
+// ... (Rest of the code)
+
+// Print the receipt
+$bytesWritten = socket_write($printer, $receipt, strlen($receipt));
+if ($bytesWritten === false) {
+    error_log("Unable to write to the printer.");
+    header('Location: self_add.php?error=printer_error');
+    exit();
+}
+
+// Check if all data was written to the socket
+if ($bytesWritten < strlen($receipt)) {
+    error_log("Incomplete write to the printer.");
+    header('Location: self_add.php?error=printer_error');
+    exit();
+}
+
+socket_close($printer);
+
+// Insert the customer into the database
+$db = new PDO("mysql:host=localhost;dbname=queuing", "root", "");
+
+// Check if the printer connection was successful before recording the record
+if ($result !== false && $bytesWritten === strlen($receipt)) {
+    $query = $db->prepare("INSERT INTO queue (party_size, queue_time, status, queue_number) VALUES (?, NOW(), 'waiting', ?)");
+    if (!$query->execute([$partySize, $queueNumber])) {
+        // Handle the error here
+        header('Location: self_add.php?error=database_error');
+        exit();
+    }
+} else {
+    // Handle the error here
+    header('Location: self_add.php?error=printer_error');
+    exit();
+}
 ?>

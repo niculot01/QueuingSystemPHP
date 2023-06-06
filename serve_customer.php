@@ -42,6 +42,7 @@ $query = $db->prepare("UPDATE queue SET status = 'serving' WHERE queue_number = 
 $query->bindParam(':queue_number', $queue_number);
 $query->execute();
 
+
 // Redirect back to the queue page
 header('Location: usher.php');
 exit();

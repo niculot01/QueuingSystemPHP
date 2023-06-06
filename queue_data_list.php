@@ -17,7 +17,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        height: 650px;
+        height: auto;
 
 
 
@@ -32,8 +32,8 @@
         font-size: 50px;
         text-align: center;
         border-radius: 20px;
-
-        max-height: 660px;
+        min-height: 800px;
+        max-height: 830px;
         background-color: #ffffff;
         color: black;
         font-family: 'newake';
@@ -64,7 +64,7 @@
         padding: 10px;
         padding-bottom: 0px;
         font-family: 'newake', sans-serif;
-        font-size: 54px;
+        font-size: 45px;
         font-weight: 500;
         text-align: center;
         background-color: #ffffff;
@@ -111,8 +111,8 @@
         text-align: center;
         background-color: #ffffff;
         border-radius: 20px;
-        height: 380px;
-        width: 510px;
+        height: 515px;
+        width: 50%;
         overflow-y: hidden;
 
     }
@@ -139,15 +139,14 @@
         height: 30px;
         color: black;
 
-
     }
 
     .nstd {
         font-family: 'newake', sans-serif;
-        font-size: 70px;
+        font-size: 125px;
         text-align: center;
         animation: blink 5s infinite;
-
+        padding: 0px;
     }
 
     @keyframes blink {
@@ -160,9 +159,10 @@
     .hayst {
         display: inline-block;
         padding-left: 20px;
-        color: #666;
+        color: red;
+        /* color: #666; */
         font-family: 'newake', sans-serif;
-        font-size: 50px;
+        font-size: 100px;
         text-align: center;
         animation: utot 5s infinite;
 
@@ -170,14 +170,13 @@
 
     @keyframes utot {
         50% {
-            opacity: 0.7;
+            opacity: 0.9;
         }
 
     }
 </style>
 
 <?php
-require_once('config.php');
 // Connect to the database
 $db = new PDO("mysql:host=localhost;dbname=queuing", "root", "");
 
@@ -217,7 +216,7 @@ foreach ($queue as $customer) {
             $queue_data_by_party_size[4][] = $customer;
         } elseif ($party_size >= 5 && $party_size <= 10) {
             $queue_data_by_party_size[10][] = $customer;
-        } elseif ($party_size >= 11 && $party_size <= 12) {
+        } elseif ($party_size >= 11 && $party_size <= 50) {
             $queue_data_by_party_size[12][] = $customer;
         }
     }
@@ -338,7 +337,7 @@ foreach ($queue as $key => $customer) {
     ?>
     <!-- Display the table for NOW SERVING queue -->
     <div class="nstable-container" style="background-color: #ffba08">
-        <h2 style="color: black; font-size: 50px;">NOW IN QUEUE</h2>
+        <h2 style="color: black; font-size: 65px;">NOW IN QUEUE</h2>
         <table class="nstable">
             <tbody class="nstbody">
                 <?php foreach ($now_serving as $customer): ?>

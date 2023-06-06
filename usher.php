@@ -190,7 +190,8 @@
       border: none;
       padding: 100px;
       transition: transform 0.3s ease;
-    }
+      font-size: 40px;
+      }
 
     .refresh:hover {
       transform: rotate(-10deg);
@@ -235,13 +236,8 @@
 
   <script>
     setInterval(function () {
-      $('#queue').load('queue_data.php');
-    }, 1000);
-
-
-    setInterval(function () {
       location.reload();
-    }, 5000);
+    }, 60000);
   </script>
 
 
@@ -285,18 +281,7 @@
       button.addEventListener('mouseout', hideTooltip);
     });
   </script>
-  <script>
-    function reloadQueue() {
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "http://192.168.0.250/Q/queuelist.php", true);
-      xhr.send();
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          location.reload();
-        }
-      };
-    }
-  </script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
@@ -313,16 +298,12 @@
           <button class="refresh" style="margin-right: 18px;" onclick="location.reload()" title="Refresh Page"><i
               class="fa fa-refresh fa-2x" aria-hidden="true"></i></button>
 
-          <form method="post" action="delete_all.php"
+          <!-- <form method="post" action="delete_all.php"
             onsubmit="return confirm('Are you sure you want to reset queue numbers and delete all records?')">
             <button type="submit" name="reset_delete" title="Reset Queue Numbers and Delete All Records"><i class="fa fa-minus-circle fa-2x" aria-hidden="true"></i><i
                 class="fa fa-trash fa-2x" aria-hidden="true"></i></button>
-          </form>
+          </form> -->
 
-
-
-          <!-- <button class="fa fa-refresh fa-2x" style="position:absolute; top:60px"
-            onclick="reloadQueue()">Queuelist</button> -->
         </div>
         <div class="total">
           <?php include 'total_customer.php' ?>

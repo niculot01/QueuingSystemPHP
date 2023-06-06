@@ -20,9 +20,6 @@
 
 
 <?php
-require_once('config.php');
-
-
 $db = new PDO("mysql:host=localhost;dbname=queuing", "root", "");
 
 // Retrieve the queue data

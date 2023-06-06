@@ -258,15 +258,58 @@
   .modal-body button {
     font-size: 6.3rem;
   }
+
+  /* For modal window style */
+  .larger-modal {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .swal2-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .swal2-popup {
+    width: 90%;
+    height: 90%;
+    max-width: 800px;
+    max-height: 800px;
+  }
+
+  .swal2-title {
+    font-size: 48px;
+  }
+
+  .swal2-content {
+    font-size: 36px;
+  }
+
+  .swal2-actions button {
+    font-size: 32px;
+    padding: 15px 30px;
+  }
+
+  @media (max-width: 800px) {
+    .swal2-popup {
+      width: 95%;
+      height: 95%;
+    }
+  }
+
+  .swal2-custom-font {
+    font-size: 36px;
+  }
+
+  .swal2-custom-html {
+    font-size: 36px;
+  }
 </style>
-
-<script>
-  // Refresh the queue every 5 seconds
-  setInterval(function () {
-    $('#queue').load('queue_data.php');
-  }, 1000);
-</script>
-
 
 
 <?php
@@ -322,7 +365,7 @@ $query = $db->prepare("SELECT * FROM queue WHERE status = 'seated' ORDER BY queu
 $query->execute();
 $seated_customers = $query->fetchAll();
 
-// Retrieve the queue data for customers who are seated
+// Retrieve the queue data for canceled customers
 $query = $db->prepare("SELECT * FROM queue WHERE status = 'canceled' ORDER BY queue_time");
 $query->execute();
 $canceled_customers = $query->fetchAll();
@@ -353,7 +396,7 @@ foreach ($queue_data as $customer) {
     $queue_data_by_party_size[4][] = $customer;
   } elseif ($party_size >= 5 && $party_size <= 10) {
     $queue_data_by_party_size[10][] = $customer;
-  } elseif ($party_size >= 11 && $party_size <= 30) {
+  } elseif ($party_size >= 11 && $party_size <= 50) {
     $queue_data_by_party_size[12][] = $customer;
   }
 }
@@ -361,23 +404,51 @@ foreach ($queue_data as $customer) {
 
 
 
-
 <html>
 
 <head>
   <title>My Queue System</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.css">
+
+  <!-- SweetAlert JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script>
     // Add event listener to floor select element for each customer
     $(document).ready(function () {
       $('.table-wrapper select[name="floor"]').change(function () {
         var floor = $(this).val();
-        var speakButtons = $(this).closest('tr').find('.button-container button');
-        speakButtons.hide();
-        speakButtons.filter('.speak-floor-' + floor).show();
+        var floorInput = $(this).closest('tr').find('input[name="floor"]');
+        floorInput.val(floor);
       });
+
+      $('.serve-submit-button').click(function () {
+        var floorInput = $(this).closest('.modal-body').find('input[name="floor"]');
+        var floor = floorInput.val();
+        var queueNumber = floorInput.data('queue-number');
+        if (floor) {
+          var message = 'Customer ' + queueNumber + ' is ready to be seated, please proceed to ' + getFloorName(floor) + ' floor. Customer ' + queueNumber + ' is ready to be seated, please proceed to ' + getFloorName(floor) + ' floor.';
+          speak(message); // Pass only the message to the speak function
+        }
+      });
+
+      function speak(text) {
+        var utterance = new SpeechSynthesisUtterance();
+        utterance.text = text;
+        window.speechSynthesis.speak(utterance);
+      }
     });
-    
+
+    function getFloorName(floor) {
+      var floorNames = {
+        '1ˢᵗFloor': 'main entrance',
+        '2ⁿᵈFloor': 'second',
+        '3ʳᵈFloor': 'third',
+        '6ᵗʰFloor': 'sixth'
+      };
+      return floorNames[floor];
+    }
   </script>
 </head>
 
@@ -417,7 +488,7 @@ foreach ($queue_data as $customer) {
                     <form method="POST" action="serve_customer.php">
                       <input type="hidden" name="queue_number"
                         value="<?php echo htmlspecialchars($customer['queue_number']); ?>">
-                      <button type="button" class="serve-button" data-toggle="modal"
+                      <button type="button" class="serve-button" data-toggle="modal" style="background-color: blue;"
                         data-target="#serve-modal-<?php echo htmlspecialchars($customer['queue_number']); ?>">Serve</button>
                     </form>
 
@@ -439,10 +510,13 @@ foreach ($queue_data as $customer) {
                                 <input type="hidden" name="queue_number"
                                   value="<?php echo htmlspecialchars($c['queue_number']); ?>">
                                 <input type="hidden" name="floor"
-                                  id="floor-input-<?php echo htmlspecialchars($c['queue_number']); ?>" value="">
+                                  id="floor-input-<?php echo htmlspecialchars($c['queue_number']); ?>" value=""
+                                  data-queue-number="<?php echo htmlspecialchars($c['queue_number']); ?>">
                                 <label for="floor-select-<?php echo htmlspecialchars($c['queue_number']); ?>">Select a
                                   floor:</label>
-                                <select id="floor-select-<?php echo htmlspecialchars($c['queue_number']); ?>" name="floor">
+                                <select id="floor-select-<?php echo htmlspecialchars($c['queue_number']); ?>" name="floor"
+                                  required>
+                                  <option value=""></option>
                                   <option value="1ˢᵗFloor">1st Floor</option>
                                   <option value="2ⁿᵈFloor">2nd Floor</option>
                                   <option value="3ʳᵈFloor">3rd Floor</option>
@@ -455,35 +529,47 @@ foreach ($queue_data as $customer) {
                         </div>
                       </div>
                     <?php endforeach; ?>
+
                     <form method="POST" action="cancel_customer.php"
-                      onsubmit="return confirm('Are you sure you want to cancel this queue number?')">
+                      onsubmit="confirmCancellation(event, '<?php echo htmlspecialchars($customer['queue_number']); ?>')">
                       <input type="hidden" name="queue_number"
                         value="<?php echo htmlspecialchars($customer['queue_number']); ?>">
-                      <button class="cancel-button" type="submit">Cancel</button>
+                      <button class="cancel-button" type="submit" style="background-color: red;">Cancel</button>
                     </form>
+
+                    <script>
+                      function confirmCancellation(event, queueNumber) {
+                        event.preventDefault(); // Prevent the form from submitting immediately
+
+                        Swal.fire({
+                          title: 'Confirmation',
+                          html: `<div class="swal2-custom-html">Are you sure you want to cancel queue number<br><strong>${queueNumber}</strong>?</div>`,
+                          icon: 'warning',
+                          showCancelButton: true,
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'Yes, cancel it',
+                          cancelButtonText: 'No, keep it',
+                          customClass: {
+                            container: 'larger-modal',
+                            title: 'swal2-custom-font',
+                            content: 'swal2-custom-font',
+                            actions: 'swal2-custom-font'
+                          }
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            event.target.submit();
+                          }
+                        });
+                      }
+                    </script>
 
                   <?php elseif ($customer['status'] == 'serving'): ?>
                     <form method="POST" action="seat_customer1.php">
                       <input type="hidden" name="id" value="<?php echo htmlspecialchars($customer['id']); ?>">
-                      <button type="submit">Seat</button>
+                      <button type="submit" style="background-color: orange;">Seat</button>
                     </form>
-                    <div class="button-container">
-                      <form method="POST">
-                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($customer['id']); ?>">
-                        <button type="button" class="speak-floor-1"
-                          onclick="speak('<?php echo htmlspecialchars($customer['queue_number']); ?>', 'Main entrance'); toggleQueueNumberBlinking(this)">1</button>
-                      </form>
-                      <form method="POST">
-                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($customer['id']); ?>">
-                        <button type="button" class="speak-floor-2"
-                          onclick="speak('<?php echo htmlspecialchars($customer['queue_number']); ?>', '2nd'); toggleQueueNumberBlinking(this)">2</button>
-                      </form>
-                      <form method="POST">
-                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($customer['id']); ?>">
-                        <button type="button" class="speak-floor-3"
-                          onclick="speak('<?php echo htmlspecialchars($customer['queue_number']); ?>', 'third'); toggleQueueNumberBlinking(this)">3</button>
-                      </form>
-                    </div>
+
                   <?php else: ?>
                     <?php // Do nothing ?>
                   <?php endif; ?>
